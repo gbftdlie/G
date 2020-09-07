@@ -30,11 +30,11 @@ MNN Log:
 
 #5  0x00007f0c6e16a58c in __GI___libc_free (mem=<optimized out>) at malloc.c:2975
 
-
-
-
-
-
 #6  0x00007f0c6d17a654 in MNN::Tensor::~Tensor() () from /usr/local/lib/python2.7/dist-packages/_mnncengine.so
 
 #7  0x00007f0c6d0fe2a0 in PyMNNTensor_dealloc (self=0x7f0c6e86ab50) at /ruhuan/Projects/AliNNPrivate/pymnn/src/MNN.cc:1086
+
+
+
+
+
