@@ -8,8 +8,10 @@ Inference Failure
 ----------------
 
 The Reduceprod cannot output results (shown in Fig.  the model with 26 operators). 
+
 ![image](https://user-images.githubusercontent.com/69624583/92420420-c1b53e80-f1a5-11ea-8c6c-37d64034fa32.png)
 ![image](https://user-images.githubusercontent.com/69624583/92420438-d98cc280-f1a5-11ea-8513-256922c35553.png)
+
 MNN Log: 
 *** Error in `python': free(): invalid next size (fast): 0x0000000001e2cb90 ***
 ======= Backtrace: =========
