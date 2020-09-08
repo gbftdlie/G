@@ -7,7 +7,7 @@ Inference Failure
  ***IF-1 Reduceprod: The Reduceprod cannot output results. Inference aborted.***
 ----------------
 
-The Reduceprod cannot output results (shown in Fig.  the model with 26 operators). 
+The Reduceprod cannot output results (on the left side of the structure ). This model contains 26 operators.
 
 ![image](https://user-images.githubusercontent.com/69624583/92420420-c1b53e80-f1a5-11ea-8c6c-37d64034fa32.png)
 ![image](https://user-images.githubusercontent.com/69624583/92420438-d98cc280-f1a5-11ea-8513-256922c35553.png)
@@ -36,6 +36,37 @@ MNN Log:
 #6  0x00007f0c6d17a654 in MNN::Tensor::~Tensor() () from /usr/local/lib/python2.7/dist-packages/_mnncengine.so
 
 #7  0x00007f0c6d0fe2a0 in PyMNNTensor_dealloc (self=0x7f0c6e86ab50) at /ruhuan/Projects/AliNNPrivate/pymnn/src/MNN.cc:1086
+
+
+
+
+ ***IF-2 The shapes of the 4 output tensors of the model are 0 with a certain probability.***
+----------------
+pic
+
+The shapes of the 4 output tensors(mul_10100, mul_10800, reduceprod_10500,squeeze_10600) of the model are 0 with a certain probability.
+
+The shapes of these 4 output tensors in  three inferences are listed as follows.  And the  results of three inferences are not correct.
+
+
+| Inference  | mul_10100   | mul_10800  | reduceprod_10500  | squeeze_10600 |
+| ------------- |:-------------:|:----------:|:----------:| :----------: |
+| 1        | (0,0,0,0) | (0,0,0,0)     |(0,0,0,0)       | (0,0,0,0)  |
+| 2       | (8,2,11,11)    |  (0,0,0,0)     |(0,0,0,0)       | (0,0,0,0)  |
+| 3      | (8,2,11,11)    |   (0,0,0,0)  |   (11,)   | (176, 11) |
+
+
+MNN log: 
+Reshape error: 22 -> 2.
+due to the internal logic of MNN, if your MNN model doesn't have input shape, you may ignore this 'Resize error' information:
+** Resize error for [Reshape], reshape_10800, code=3 **
+it will work after you set the input tensor shape in MNN, and then resize the Session
+
+However, Slice's 'size' is (2,1,1,1). And Reshape's 'shape' is (2,1). That is to say, the number of input and output data of the reshape operator is 2.
+
+
+
+
 
 
 
