@@ -22,9 +22,9 @@ MNN Log: Error for 18. Segmentation fault (core dumped).
  
 ***MCF-2 Deconv： Conversion aborted.***
 ----------------
-pic
+![mcf3fusion_fp16_randomnet_ws_2_832384_0001](https://user-images.githubusercontent.com/69624583/92540037-f7295d00-f275-11ea-965a-7145996dc093.png)
 
-resizenearestneighbor+conv2dbackpropinput. The Deconv API of the pb model is tf.nn.conv2dtranspose. 
+The Deconv API of the pb model is tf.nn.conv2dtranspose. 
 
 MNN log: /converter/source/common/writeFb.cpp:108  Check failed: (notSupportOps.size()) == (0). Not Support: Tensorflow::Conv2DBackpropInput, output\_shape is not consistent with inferred output shape in MNN. (height, width): (38,102) vs (4,21). Convert Tensorflow's Op deconv2d\_outputdata\_10100, type = Conv2DBackpropInput, failed. Aborted (core dumped).
 
@@ -51,9 +51,10 @@ MNN log: /converter/source/common/writeFb.cpp:108  Check failed: (notSupportOps.
  
  
   
- ***MCF-3 A model with 10 operators： Conversion aborted.***
+ ***MCF-3 A model with 10+ operators： Conversion aborted.***
 ----------------
-pic 
+![8](https://user-images.githubusercontent.com/69624583/92540315-bd0c8b00-f276-11ea-95ed-4b5bff02023e.jpg)
+
 MNN log:
 
  *** Error in `/usr/bin/python': free(): invalid pointer: 0x0000000001db1940 ***
@@ -100,7 +101,9 @@ MNN log:
 
  ***MCF-4 A model with 5 operators： Conversion aborted.***
 ----------------
-pic
+
+![10_mcf](https://user-images.githubusercontent.com/69624583/92540215-6d2dc400-f276-11ea-8458-209a0a5923ff.png)
+
 MNN log:
 Start to Optimize the MNN Net...
  [22:08:40] :20: Inputs: placeholder_10000
