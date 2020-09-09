@@ -596,3 +596,63 @@ _RE(mnn_ARMCPU)_ of SpaceToBatchND is 25.00% .
  
  
  
+ 
+   ***DCF-27 Maximum. Data comparison failure on MNN X86CPU and TensorFlow.***
+---------------
+
+After analyzing the data of each layer of the model, it is found that the calculation of the Maximum operator is incorrect. When comparing nan and -inf(output by sqrt), TensorFlow returns nan , MNN returns -inf. The result of calculation with nan should be nan. And thus, the cause of this inconsistency should be the calculation error of MNN.
+
+The configuration of the Maximum operator is as follows.
+
+ placeholder1 = tf.placeholder(shape=shape1,dtype=tf.float32,name="placeholder_10000")
+ 
+ placeholder2 = tf.placeholder(shape=shape2,dtype=tf.float32,name="placeholder_10200")
+  
+ res_maximum = tf.math.minimum(placeholder1, placeholder2,name = "minimum_outputdata_10100")
+
+
+The input tensor1： nan nan inf inf nan nan inf nan inf inf nan inf inf nan nan nan inf inf inf inf nan inf nan inf
+
+The input tensor2：nan nan -inf nan -inf -inf -inf nan -inf -inf nan nan nan nan nan nan -inf -inf -inf nan -inf -inf nan -inf
+
+The output tensor of TF: nan, nan, inf, inf, nan, nan, inf, nan, inf, inf, nan, inf, inf, nan, nan, nan, inf, inf, inf, inf, nan, inf, nan, inf
+
+The output tensor of  mnn X86 CPU: nan,  nan,  inf,  inf, -inf, -inf,  inf,  nan,  inf,  inf,  nan, inf,  nan,  nan,  nan,  nan,  inf,  inf,  inf,  inf, -inf,  inf,  nan,  inf
+ 
+ 
+ 
+  ***DCF-28 Minimum. Data comparison failure on MNN X86CPU and TensorFlow.***
+---------------
+
+After analyzing the data of each layer of the model, it is found that the calculation of the Minimum operator is incorrect. When comparing nan and -inf(output by sqrt), TensorFlow returns nan , MNN returns -inf. The result of calculation with nan should be nan. And thus, the cause of this inconsistency should be the calculation error of MNN.
+
+The configuration of the Minimum operator is as follows.
+
+placeholder1 = tf.placeholder(shape=shape1,dtype=tf.float32,name="placeholder_10000")
+
+placeholder2 = tf.placeholder(shape=shape2,dtype=tf.float32,name="placeholder_10200")
+
+res_maximum = tf.math.minimum(placeholder1, placeholder2,name = "minimum_outputdata_10100")
+
+
+The input tensor1： nan inf nan nan nan nan nan inf inf inf nan nan nan nan inf inf inf inf inf nan nan nan nan nan
+
+The input tensor2：-inf -inf nan -inf -inf nan -inf nan nan -inf nan nan -inf -inf nan nan nan nan -inf -inf nan -inf nan -inf
+
+The output tensor of TF: nan, -inf,  nan,  nan,  nan,  nan,  nan,  inf,  inf, -inf,  nan, nan,  nan,  nan,  inf,  inf,  inf,  inf, -inf,  nan,  nan,  nan,  nan,  nan
+
+The output tensor of  mnn X86 CPU: -inf, -inf,  nan, -inf, -inf,  nan, -inf,  nan,  nan, -inf,  nan, nan, -inf, -inf,  nan,  nan,  nan,  nan, -inf, -inf,  nan, -inf,  nan, -inf
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
