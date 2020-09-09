@@ -1,4 +1,4 @@
-Inspired by the success stories of fuzz testing, we design a graph-based fuzz testing method to improve the  quality of DL inference engines. Our method has discovered more than 40 different exceptions in three types of undesired behaviors: model conversion failure, inferencefailure,  output  comparison  failure. We detail these MCF bugs as follows. 
+Inspired by the success stories of fuzz testing, we design a graph-based fuzz testing method to improve the  quality of DL inference engines. Our method has discovered more than 40 different exceptions in three types of undesired behaviors: model conversion failure, inferencefailure,  output  comparison  failure. We detail these bugs as follows. 
 
 
 
@@ -46,10 +46,6 @@ MNN log: /converter/source/common/writeFb.cpp:108  Check failed: (notSupportOps.
  
  
 
-
- 
- 
- 
   
  ***MCF-3 A model with 10+ operators： Conversion aborted.***
 ----------------
@@ -128,5 +124,19 @@ Start to Optimize the MNN Net...
 #8  0x00000000004bc9ba in PyEval_EvalFrameEx ()
 
 
+ ***Concat： Model Generation Failure In TensorFlow.***
+----------------
+It is worthy of mentioning that some exceptions of TensorFlow are found in model generation. When generating a model containing two Concats whose two inputs come from the same two constants, TensorFlow will get stuck.
 
+The configuration of the model is as follows.
+
+x  = tf.placeholder(shape=(n,h,w,c), dtype=tf.float32,name="input_1")
+
+y=tf.constant(y_data,dtype=tf.float32, shape=(n,h,w,c),name="constant_1")
+
+m=tf.constant(m_data,dtype=tf.float32, shape=(n,h,w,c),name="constant_3")
+
+c_1= tf.concat([x,y,m], axis=2, name="concat")
+
+out = tf.concat([c_1,y,m], axis=2, name="concat_1")
 
