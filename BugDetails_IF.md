@@ -42,7 +42,7 @@ MNN Log:
 
  ***IF-2 The shapes of the 4 output tensors of the model are 0 with a certain probability.***
 ----------------
-![if_2_9_443247_0001](https://user-images.githubusercontent.com/69624583/92539865-63f02780-f275-11ea-8f92-6c44e2ba87dc.png)
+![if_2_9_443247_0001](https://user-images.githubusercontent.com/69624583/92605466-56be5180-f2e4-11ea-8e29-f7ca1efb0b6e.png)
 
 The shapes of the 4 output tensors(mul_10100(left), mul_10800, reduceprod_10500,squeeze_10600) of the model are 0 with a certain probability.
 
@@ -69,7 +69,9 @@ However, Slice's 'size' is (2,1,1,1). And Reshape's 'shape' is (2,1). That is to
  ***IF-3 The shape of the output tensor  is 0.***
 ----------------
 
-pic
+![if3_1_rn_23_133412_0001](https://user-images.githubusercontent.com/69624583/92605547-72295c80-f2e4-11ea-8c9d-fedf979d9e51.png)
+![if3_2_rn_23_133412_0001](https://user-images.githubusercontent.com/69624583/92605554-75244d00-f2e4-11ea-98dd-f47dace3a03d.png)
+
 
 The shape of the output tensor is 0.
 
