@@ -66,8 +66,12 @@ However, Slice's 'size' is (2,1,1,1). And Reshape's 'shape' is (2,1). That is to
 
 
 
+ ***IF-3 The shape of the output tensor  is 0.***
+----------------
 
+pic
 
+The shape of the output tensor is 0.
 
 
 
