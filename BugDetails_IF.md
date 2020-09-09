@@ -42,9 +42,9 @@ MNN Log:
 
  ***IF-2 The shapes of the 4 output tensors of the model are 0 with a certain probability.***
 ----------------
-pic
+![if_2_9_443247_0001](https://user-images.githubusercontent.com/69624583/92539865-63f02780-f275-11ea-8f92-6c44e2ba87dc.png)
 
-The shapes of the 4 output tensors(mul_10100, mul_10800, reduceprod_10500,squeeze_10600) of the model are 0 with a certain probability.
+The shapes of the 4 output tensors(mul_10100(left), mul_10800, reduceprod_10500,squeeze_10600) of the model are 0 with a certain probability.
 
 The shapes of these 4 output tensors in  three inferences are listed as follows.  And the  results of three inferences are not correct.
 
