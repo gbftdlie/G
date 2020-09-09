@@ -11,7 +11,7 @@ Output Comparison Failure (Inconsistencies)
 
 ***DCF-1 Gather. core dumped and data comparison failure on MNN X86CPU and TensorFlow .***
 ---------------
-![dcfgather1fusion_fp16_randomnet_rn_5_540172_0001](https://user-images.githubusercontent.com/69624583/92539705-db718700-f274-11ea-9d88-0770cbd4ac57.png)
+![dcfgather1fusion_fp16_randomnet_rn_5_540172_0001](https://user-images.githubusercontent.com/69624583/92605943-f24fc200-f2e4-11ea-86f1-10842e7e15b3.png)
 
  _RE(mnn_X86CPU)_ of Sub1 is 52.08%, _RE(mnn_X86CPU)_ of Sub2 is 76.04\%.
  MNN log: Error in `python': double free or corruption (!prev): 0x0000000002 4ae8b0. Backtrace: /dist-packages/\_mnncengine.so (\_ZN3MNN15BufferAllocator4NodeD1Ev+0x88) [0x7ff0e81 7a098]. Aborted (core dumped). 
@@ -86,9 +86,7 @@ The output tensor of TF is 0.894427. The  output tensor of  mnn X86 CPU is 1.712
 
 ***DCF-6 Realdiv. Data comparison failure on MNN X86CPU and TensorFlow.***
 ---------------
-pic
-
-dcf2(4)
+![dcffusion_fp16_randomnet_rn_3_832028_0001](https://user-images.githubusercontent.com/69624583/92606037-13b0ae00-f2e5-11ea-9567-db98bcdba823.png)
 
 The results of dividing by zero (coming from Pad ) in Realdiv are inf in TensorFlow and nan in MNN respectively. 
 
@@ -314,6 +312,8 @@ The output tensor of  mnnX86 CPU: 0.685642 1.70892 1.03409 1.36326 0.685642 1.59
  
    ***DCF-15 Maxpooling. Data comparison failure on MNN ARMCPU and TensorFlow.***
   ---------------
+  
+  
 The configuration of the Maxpooling operator is as follows.
 
 n = 4，h = 2，w = 2，c = 2
@@ -444,6 +444,8 @@ _RE(mnn_ARMCPU)_ of Conv2d is 0%.
 
    ***DCF-20 Deconv2d. Data comparison failure on MNN ARMCPU and TensorFlow.***
   ---------------
+
+
 The configuration of the Deconv2d operator is as follows.
 
 n = 3，h = 2，w = 2，c = 2
@@ -473,7 +475,6 @@ _RE(mnn_ARMCPU)_ of Deconv2d is 0%.
 
    ***DCF-21 SpaceToBatchND. Data comparison failure on MNN ARMCPU and TensorFlow.***
   ---------------
-  pic
   
 After analyzing the data of each layer of the model, it is found that the calculation of the first SpaceToBatchND operator is incorrect. The configuration of the SpaceToBatchND operator is as follows.
 
@@ -503,7 +504,7 @@ _RE(mnn_ARMCPU)_ of SpaceToBatchND is 7.14% .
  
    ***DCF-22 Reducemax. Data comparison failure on MNN X86CPU and TensorFlow.***
 ---------------
-pic
+![dcf22_reducemax_rn_3_832029_0001](https://user-images.githubusercontent.com/69624583/92606825-f6301400-f2e5-11ea-9d74-6ac27b614389.png)
 
 After analyzing the data of each layer of the model, it is found that the calculation of the Reducemax operator is incorrect. When comparing nan and -inf(output by sqrt), TensorFlow returns -inf, MNN returns nan. The result of calculation with nan should be nan. And thus, the cause of this inconsistency should be the calculation error of TensorFlow.
 
@@ -528,7 +529,7 @@ The output tensor of  mnn X86 CPU: [[[[7.]  [8.]    [9.]   [inf]    [nan]      [
  
    ***DCF-23 Reducemax. Data comparison failure on MNN X86CPU and TensorFlow.***
 ---------------
-pic
+![dcf23_reducemax_ws_2_832024_0001](https://user-images.githubusercontent.com/69624583/92606774-e7496180-f2e5-11ea-81f7-14b0591cff10.png)
 
 After analyzing the data of each layer of the model, it is found that the calculation of the Reducemax operator is incorrect. When comparing nan and -inf(output by sqrt), TensorFlow returns -inf, MNN returns nan. The result of calculation with nan should be nan. And thus, the cause of this inconsistency should be the calculation error of TensorFlow.
 
@@ -572,7 +573,7 @@ The output tensor of  mnn X86 CPU: 9 10
  
    ***DCF-26 BatchToSpaceND. Data comparison failure on MNN ARMCPU and TensorFlow.***
   ---------------
-  pic
+  ![dcf26_BatchToSpaceND_rn_2_268332_0001](https://user-images.githubusercontent.com/69624583/92606701-cf71dd80-f2e5-11ea-9cd0-e297966183f4.png)
   
 After analyzing the data of each layer of the model, it is found that the calculation of the first SpaceToBatchND operator is incorrect. The configuration of the SpaceToBatchND operator is as follows.
 n = 2,h = 2,w = 3,c = 4
