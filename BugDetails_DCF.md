@@ -11,7 +11,9 @@ Output Comparison Failure (Inconsistencies)
 
 ***DCF-1 Gather. core dumped and data comparison failure on MNN X86CPU and TensorFlow .***
 ---------------
-The model structure is shown in Fig. . _RE(mnn_X86CPU)_ of Sub1 is 52.08%, _RE(mnn_X86CPU)_ of Sub2 is 76.04\%.
+![dcfgather1fusion_fp16_randomnet_rn_5_540172_0001](https://user-images.githubusercontent.com/69624583/92539705-db718700-f274-11ea-9d88-0770cbd4ac57.png)
+
+ _RE(mnn_X86CPU)_ of Sub1 is 52.08%, _RE(mnn_X86CPU)_ of Sub2 is 76.04\%.
  MNN log: Error in `python': double free or corruption (!prev): 0x0000000002 4ae8b0. Backtrace: /dist-packages/\_mnncengine.so (\_ZN3MNN15BufferAllocator4NodeD1Ev+0x88) [0x7ff0e81 7a098]. Aborted (core dumped). 
 
 #0  0x00007ff418033438 in __GI_raise (sig=sig@entry=6) at ../sysdeps/unix/sysv/linux/raise.c:54
