@@ -692,8 +692,8 @@ The reduce_XXXX's input is not ready.
    ***DCF-36  Data comparison failure on MNN X86CPU and TensorFlow.***
 ---------------
  
- pic
- 
+ ![dcf36_1_29_646065_0001](https://user-images.githubusercontent.com/69624583/92746508-eda70e80-f3b5-11ea-91e4-8f773449bade.png)
+![dcf36_2_29_646065_0001](https://user-images.githubusercontent.com/69624583/92746539-f39cef80-f3b5-11ea-9718-f0a80d4efc42.png)
  
 This model has 4 output results, one of which is inconsistent between MNN X86CPU and TensorFlow. The main difference in the results is that the output is nan(-nan) or inf(-inf).
 
