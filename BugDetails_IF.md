@@ -1,4 +1,4 @@
-Inspired by the success stories of fuzz testing, we design a graph-based fuzz testing method to improve the  quality of DL inference engines. Our method has discovered more than 40 different exceptions in three types of undesired behaviors: model conversion failure, inference failure,  output  comparison  failure. We detail the IF bugs as follows.
+We design a graph-based fuzz testing method to improve the  quality of DL inference engines. Our method has discovered more than 40 different exceptions in total. We detail the IF bugs as follows.
 
 
 Inference Failure
@@ -74,6 +74,26 @@ However, Slice's 'size' is (2,1,1,1). And Reshape's 'shape' is (2,1). That is to
 
 
 The shape of the output tensor is 0.
+
+
+
+
+
+
+ ***IF-4 Split: When the num_or_size_splits parameter contains 0, the shape of the output tensor is 0.***
+----------------
+
+
+When the num_or_size_splits parameter contains 0,  the Split operator will yield a calculation error.
+
+The configuration of the Split operator is as follows.
+
+x  = tf.placeholder(shape=(n,h,w,c), dtype=tf.float32,name="placeholder_10000")
+
+out = tf.split(x,[0,3],axis = 2,name = "split" )
+
+
+
 
 
 
