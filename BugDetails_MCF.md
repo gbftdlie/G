@@ -1,4 +1,4 @@
-Inspired by the success stories of fuzz testing, we design a graph-based fuzz testing method to improve the  quality of DL inference engines. Our method has discovered more than 40 different exceptions in three types of undesired behaviors: model conversion failure, inferencefailure,  output  comparison  failure. We detail these bugs as follows. 
+We design a graph-based fuzz testing method to improve the  quality of DL inference engines. Our method has discovered more than 40 different exceptions in total. We detail these bugs as follows. 
 
 
 
@@ -124,11 +124,17 @@ Start to Optimize the MNN Net...
 #8  0x00000000004bc9ba in PyEval_EvalFrameEx ()
 
 
+ ***MCF-5： StopGradient： Model Generation Failure In MNN.***
+----------------
+No error was reported when converting models that include unsupported StopGradient operators. The conversion process did not intercept an error and was aborted, and an empty model with a size of 0 was generated.
+MNN log: Model has no oplist.
+
+
  ***Concat： Model Generation Failure In TensorFlow.***
 ----------------
 It is worthy of mentioning that some exceptions of TensorFlow are found in model generation. When generating a model containing two Concats whose two inputs come from the same two constants, TensorFlow will get stuck.
 
-The configuration of the model is as follows.
+The configuration of the Concats is as follows.
 
 x  = tf.placeholder(shape=(n,h,w,c), dtype=tf.float32,name="input_1")
 
