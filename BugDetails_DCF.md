@@ -1,4 +1,4 @@
-Inspired by the success stories of fuzz testing, we design a graph-based fuzz testing method to improve the  quality of DL inference engines. Our method has discovered more than 40 different exceptions in three types of undesired behaviors: model conversion failure, inferencefailure,  output  comparison  failure. We detail the DCF bugs as follows. 
+We design a graph-based fuzz testing method to improve the  quality of DL inference engines. Our method has discovered more than 40 different exceptions in total. We detail the DCF bugs as follows. 
 
 The threshold for the comparison of MNN and TensorFlow is that numbers with a relative error greater than 0.1% and less than 0.1% of the total data.
 Formally, let _RE(mnn)_ be the ratio of the numbers with the relative error between MNN and TensorFlow over the total output data of an operator. 
@@ -112,11 +112,11 @@ When the number of inputs is more than 2, the Concat operator  will yield a calc
 
 The values of the input and output tensors of the Concat operator are as follows. 
 
-The input1: 3.60285 9.53354
+The input tensor1: 3.60285 9.53354
 
-The input2: 8.67775 2.24457
+The input tensor2: 8.67775 2.24457
 
-The input3: 1.38196 2.91937
+The input tensor3: 1.38196 2.91937
 
 The output tensor of TF: 3.602852 9.533535 8.677751 2.244566 1.381964 2.919371. The output tensor of  mnn X86 CPU: 1.381964 2.919371 8.677751 2.244566 1.381964 2.919371.
 
@@ -141,7 +141,7 @@ The configuration of the Deconv operator is as follows.
  
  out = tf.nn.conv2d_transpose(c,filter_data, strides=[1,2,2,1],output_shape=[10,2,7,3], padding="VALID",name="deconv")
 
-The shape of the output tensor of Tf and mnn is inconsistent. The output tensor shape of TF: [10,2,7,3](NHWC).  The output tensor shape of MNN X86 CPU: [10,3,1,7].
+The shape of the output tensor of Tf and mnn is inconsistent. The output tensor shape of TF: [10, 2, 7,3 ] (NHWC).  The output tensor shape of MNN X86 CPU: [10,3,1,7].
 
 
 
@@ -531,7 +531,7 @@ The output tensor of  mnn X86 CPU: [[[[7.]  [8.]    [9.]   [inf]    [nan]      [
 ---------------
 ![dcf23_reducemax_ws_2_832024_0001](https://user-images.githubusercontent.com/69624583/92606774-e7496180-f2e5-11ea-81f7-14b0591cff10.png)
 
-After analyzing the data of each layer of the model, it is found that the calculation of the Reducemax operator is incorrect. When comparing nan and -inf(output by sqrt), TensorFlow returns -inf, MNN returns nan. The result of calculation with nan should be nan. And thus, the cause of this inconsistency should be the calculation error of TensorFlow.
+After analyzing the data of each layer of the model, it is found that the calculation of the Reducemax operator is incorrect.The result of calculation should be 9.0 and 10.0. And thus, the cause of this inconsistency should be the calculation error of TensorFlow.
 
 The configuration of the Reducemax operator is as follows.
 
@@ -649,11 +649,70 @@ The output tensor of  mnn X86 CPU: -inf, -inf,  nan, -inf, -inf,  nan, -inf,  na
  
  
  
+  ***DCF-29 Reducemin. Data comparison failure on MNN X86CPU and TensorFlow.***
+---------------
+
+After analyzing the data of each layer of the model, it is found that the calculation of the Reducemax operator is incorrect. 
+The decimal part of the calculation result should be 0. And thus, the cause of this inconsistency should be the calculation error of TensorFlow.
+
+The configuration of the Maximum operator is as follows.
+
+n = 8, h = 5, w = 3,  = 4
+        
+placeholder = tf.placeholder(shape=(n,h,w,c),dtype=tf.float32,name="placeholder_10000")
+
+res_ceil = tf.math.ceil(placeholder,name="celi_outputdata_10000")
+
+res_reducemin = tf.reduce_min(res_ceil,axis=[1,2,3], keep_dims=True,name="reducemin")
+
+The input tensor of Ceil ： 0.692225 0.93858 0.712277 0.225081 0.949312 0.161038 0.0869423 0.529012 0.213447 0.505565 0.104097 0.12932 0.91826 0.41102 0.639792 0.651933 0.138182 0.338399 0.354983 0.5047 0.821886 0.719497 0.888915 0.260079 0.979791 0.530006 0.636251 0.172793 0.6888 0.996615 0.277687 0.397159 0.0931961 0.414661 0.307734 0.296113 0.944499 0.509749 0.126067 0.833146 0.669131 0.952248 0.987454 0.362709 0.010182 0.693371 0.710924 0.304081 0.741464 0.494248 0.880531 0.284276 0.477406 0.0302742 0.939258 0.712152 0.648007 0.867603 0.577887 0.460249 0.00215121 0.304308 0.775361 0.999424 0.354603 0.221053 0.895589 0.140296 0.760546 0.766981 0.81381 0.815747 0.190551 0.0709158 0.33612 0.161643 0.187871 0.962751 0.504239 0.425821 0.286352 0.56067 0.556322 0.96662 0.509775 0.951699 0.987685 0.352054 0.955333 0.0554917 0.236716 0.967292 0.95307 0.841556 0.0750637 0.80934 0.217561 0.672645 0.946269 0.596971 0.42113 0.500691 0.11898 0.504732 0.169392 0.138503 0.19804 0.000392505 0.388237 0.878493 0.949584 0.122674 0.991812 0.380613 0.599924 0.580828 0.898459 0.698719 0.395472 0.198427 0.62872 0.0436476 0.575488 0.271558 0.709563 0.294651 0.0722937 0.996233 0.405947 0.865826 0.753831 0.443388 0.456224 0.440658 0.374573 0.309357 0.371972 0.5165 0.45658 0.824428 0.3738 0.54454 0.117894 0.671438 0.405704 0.151209 0.77726 0.236028 0.0347466 0.797211 0.676711 0.941772 0.668484 0.68935 0.814786 0.017036 0.213829 0.306827 0.000708339 0.561073 0.885485 0.38042 0.601363 0.910492 0.817526 0.433484 0.998961 0.0579396 0.0354243 0.208774 0.572147 0.303477 0.795528 0.470845 0.0611874 0.248836 0.756074 0.741556 0.37829 0.836266 0.171869 0.648324 0.985769 0.479648 0.0410855 0.178417 0.966587 0.818564 0.779305 0.123689 0.454796 0.0167353 0.31844 0.636537 0.533819 0.157864 0.0354836 0.678528 0.916046 0.957519 0.922705 0.234027 0.883145 0.261043 0.859908 0.665565 0.329577 0.849441 0.504726 0.274414 0.129874 0.635124 0.905432 0.932581 0.259519 0.0896101 0.0422479 0.544967 0.630855 0.799092 0.930978 0.709916 0.651128 0.128197 0.622245 0.802919 0.952257 0.269869 0.101824 0.994266 0.874646 0.416595 0.527015 0.391797 0.169745 0.161902 0.817495 0.549307 0.241133 0.504831 0.454197 0.555321 0.62291 0.31103 0.261787 0.214955 0.97376 0.183044 0.0249169 0.0371966 0.0570485 0.925517 0.870879 0.698749 0.830457 0.938765 0.389112 0.00295612 0.485772 0.313742 0.392849 0.0771843 0.0539229 0.838047 0.464059 0.880103 0.545655 0.0732461 0.72186 0.413933 0.804667 0.514696 0.954016 0.937535 0.216915 0.398839 0.0536812 0.733149 0.184013 0.901414 0.35778 0.886324 0.219489 0.530526 0.108065 0.31779 0.147274 0.739766 0.933226 0.791286 0.0877398 0.438235 0.508087 0.0988351 0.827244 0.670466 0.941197 0.253886 0.444018 0.447521 0.132748 0.626819 0.470801 0.624326 0.200641 0.272204 0.149866 0.0652196 0.961756 0.675887 0.762648 0.35655 0.262811 0.202773 0.790241 0.134048 0.55609 0.832261 0.830504 0.768885 0.760313 0.704658 0.667812 0.0166153 0.266377 0.281874 0.269549 0.472509 0.0273559 0.436977 0.848994 0.380641 0.279575 0.29261 0.449598 0.660364 0.923326 0.401439 0.256106 0.626845 0.973464 0.107286 0.99078 0.162073 0.496947 0.69799 0.647916 0.552273 0.234355 0.261813 0.122905 0.246059 0.0180538 0.560145 0.19938 0.73054 0.454653 0.127464 0.997552 0.711823 0.151022 0.245862 0.685221 0.12892 0.00692515 0.717766 0.215804 0.215127 0.220378 0.470857 0.860159 0.866804 0.00436794 0.128258 0.331338 0.177153 0.400856 0.586165 0.238451 0.814553 0.962278 0.151696 0.821186 0.922021 0.272277 0.763492 0.332733 0.131988 0.572224 0.455728 0.809886 0.827012 0.559146 0.499985 0.75889 0.061708 0.659621 0.0512265 0.802936 0.578957
+0.870488 0.874845 0.340076 0.435762 0.542651 0.443902 0.726688 0.857814 0.919516 0.583788 0.711802 0.439743 0.911983 0.234367 0.178278 0.851924 0.231062 0.592798 0.0952106 0.356535 0.140992 0.0791117 0.958825 0.577415 0.578921 0.212631 0.739432 0.555858 0.716206 0.288654 0.256814 0.0622695 0.206076 0.741558 0.100626 0.685045 0.0792263 0.826257 0.561469 0.102868 0.848553 0.259438 0.518111 0.33108 0.890541 0.0106224 0.474491 0.29854 0.453791 0.139653 0.251248 0.657253 0.20492 0.529513 0.776427 0.28525 0.559803 0.531715 0.510169 0.544994 0.741698 0.5395 0.94634 0.907282 0.204054 0.921818 0.072024 0.866193 0.553041 0.296966 0.656794 0.810907 0.0374486 0.378581 0.6274 0.35115 0.612189 0.944294 0.135113 0.974301
+
+The input tensor of Reduce_min： 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 
+
+The output tensor of TF: 0.010182 0.000392505 0.000708339 0.0167353 0.00295612 0.0166153 0.00436794 0.0106224
+
+The output tensor of  mnn X86 CPU: 1 1 1 1 1 1 1 1
  
  
  
  
  
+   ***DCF-30-35 Reducemax, Reducemin, Reduceany, Reducemean, Reducesum and  Reduceall. Data comparison failure on MNN X86CPU and TensorFlow.***
+---------------
+ When the axis parameter is [], the shape of the output tensor is 0 in MNN. The output result of tensorflow is consistent with the data input to the operator.
+
+MNN log:
+The reduce_XXXX's input is not ready.
+
+
+
+
  
+   ***DCF-36  Data comparison failure on MNN X86CPU and TensorFlow.***
+---------------
+ 
+ pic
+ 
+ 
+This model has 4 output results, one of which is inconsistent between MNN X86CPU and TensorFlow. The main difference in the results is that the output is nan(-nan) or inf(-inf).
+
+
+_RE(mnn_ARMCPU)_ of the addn_12800 is 86.11%.
+
+_RE(mnn_ARMCPU)_ of the addn_12000 is 100%.
+
+_RE(mnn_ARMCPU)_ of the rsqrt_10100 is 100%.
+
+_RE(mnn_ARMCPU)_ of the rsqrt_12300 is 100%.
+
+The output tensor of TF: inf inf inf 24.0558 21.6177 18.5425 20.3782 17.1967 19.8565 -nan -nan -nan 19.2809 19.2534 25.4682 21.8413 26.5787 19.5057 -nan -nan inf 4.89995 6.50453 5.52601 4.82719 5.15199 7.9205 inf inf inf 2.4 2.4 2.4 2.4 2.4 2.4
+
+
+The output tensor of  mnn X86 CPU: inf inf inf 24.0558 21.6177 18.5425 20.3782 17.1967 19.8565 inf inf inf 19.2809 19.2534 25.4682 21.8413 26.5787 19.5057 inf inf inf 4.89995 6.50453 5.52601 4.82719 5.15199 7.9205 inf inf inf 2.4 2.4 2.4 2.4 2.4 2.4
+
+
+
+
  
  
