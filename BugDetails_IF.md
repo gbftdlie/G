@@ -1,4 +1,4 @@
- Our method has discovered more than 40 different exceptions in total. We detail the IF bugs as follows.
+ We detail the IF bugs as follows.
 
 
 Inference Failure
