@@ -1,4 +1,4 @@
-We design a graph-based fuzz testing method to improve the  quality of DL inference engines. Our method has discovered more than 40 different exceptions in total. We detail the DCF bugs as follows. 
+We detail the DCF bugs as follows. 
 
 The threshold for the comparison of MNN and TensorFlow is that numbers with a relative error greater than 0.1% and less than 0.1% of the total data.
 Formally, let _RE(mnn)_ be the ratio of the numbers with the relative error between MNN and TensorFlow over the total output data of an operator. 
