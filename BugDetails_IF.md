@@ -1,4 +1,4 @@
-We design a graph-based fuzz testing method to improve the  quality of DL inference engines. Our method has discovered more than 40 different exceptions in total. We detail the IF bugs as follows.
+ Our method has discovered more than 40 different exceptions in total. We detail the IF bugs as follows.
 
 
 Inference Failure
